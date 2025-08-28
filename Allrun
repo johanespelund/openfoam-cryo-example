@@ -1,0 +1,25 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 {const|strat}"
+    exit 1
+fi
+
+case "$1" in
+    const|strat)
+        echo "Running case: $1"
+        ;;
+    *)
+        echo "Error: invalid argument '$1'. Use 'const' or 'strat'."
+        exit 1
+        ;;
+esac
+
+cp 0/T.$1 0/gas/T
+
+echo "Running foamMultiRun > log.foamMultiRun"
+
+foamMultiRun > log.foamMultiRun
+
+#------------------------------------------------------------------------------

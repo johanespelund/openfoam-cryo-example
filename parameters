@@ -1,0 +1,4 @@
+T_L 20.323373922455573;
+q_wall 3.5;
+hydrostaticInitialisation yes;
+nOuterCorrectors 1;

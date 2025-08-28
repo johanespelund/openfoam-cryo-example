@@ -1,0 +1,98 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+#include "$FOAM_CASE/parameters"
+
+ddtSchemes
+{
+    // default CrankNicolson 0.5;
+    // default backward;
+    default Euler;
+}
+
+gradSchemes
+{
+  default  leastSquares;
+  // grad(p_rgh) cellLimited Gauss linear 1;
+  // grad(rho) cellLimited Gauss linear 1;
+
+  // grad(rho) edgeCellsLeastSquares;
+  // grad(p_rgh) edgeCellsLeastSquares;
+  // default  Gauss linear;
+  // grad(U) cellLimited Gauss linear 1;
+  // grad(k) cellLimited Gauss linear 1;
+  // grad(v2) cellLimited Gauss linear 1;
+  // grad(epsilon) cellLimited Gauss linear 1;
+  // grad(omega) cellLimited Gauss linear 1;
+  // grad(e) cellMDLimited Gauss linear 0;
+}
+
+divSchemes
+{
+    default         Gauss upwind;
+    // div(phi,U)      Gauss limitedLinearV 1;
+    // div(phi,U)      Gauss linearUpwind grad(U);
+    // div(phi,h)      Gauss limitedLinear 1;
+    // div(phi,e)      Gauss limitedLinear 1;
+    // div(phi,K)      Gauss linear;
+    // div(meshPhi,p)  Gauss linear;
+    // turbulence      Gauss upwind;
+    // turbulence      Gauss limitedLinear 1;;
+    // div(phi,k)      $turbulence_divScheme;
+    // div(phi,omega)  $turbulence_divScheme;
+    // div(phi,epsilon) $turbulence_divScheme;
+    // div(phi,v2)  $turbulence_divScheme;
+    // div(phi,phit)  $turbulence_divScheme;
+    div(phi,(p|rho))  Gauss limitedLinear 1;
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+}
+
+gradCorrection 0.0;
+
+laplacianSchemes
+{
+    default         Gauss linear limited $gradCorrection;
+    // laplacian((rho*nuEff),U)  Gauss linear limited $gradCorrection;
+    // laplacian(alphahe,h)  Gauss linear limited $gradCorrection;
+    // laplacian(rhof,ph_rgh)       Gauss weighted ghf limited $gradCorrection;
+    // laplacian(rhof,ph_rgh)       Gauss linear corrected;
+    // laplacian(rhorAUf,p_rgh)       Gauss weighted ghf limited $gradCorrection;
+    // grad(p)         Gauss linear limited 0.333;
+    // grad(p_rg)      Gauss linear limited 0.333;
+    // laplacian(alphaEff,h) Gauss linear limited 0.5;
+    
+}
+
+interpolationSchemes
+{
+    default         linear;
+    // interpolate(rho) weighted ghf;
+    // interpolate(p_rgh) banan ghf;
+    // interpolate(p) banan ghf;
+}
+
+snGradSchemes
+{
+    default      limited $gradCorrection;
+
+    // snGrad(p_rgh)      faceCorrected limited $gradCorrection;
+    // snGrad(rho)      faceCorrected limited $gradCorrection;
+    // snGrad(rho)        corrected;
+    // snGrad(p_rgh)       banana;
+    // snGrad(p)        limited 0.333;
+    // snGrad(p_rg)     limited 0.333;
+    // snGrad(h)        limited 0.5;
+}
+
